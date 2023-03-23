@@ -1,1 +1,5 @@
-Simulator https://ibb.co/qCyZ0Lg
+HW1
+Simulator
+![Console commands](./assets/Phone.png)
+Code
+![Console commands](./assets/Code.png)
