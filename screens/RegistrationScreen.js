@@ -58,7 +58,7 @@ export default function App() {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.bgImageContainer}>
         <ImageBackground
-          source={require("/Users/francuz_alexandr/Documents/GitHub/react native/myNewProject/assets/Image/Photo-BG.png")}
+          source={require("../assets/Image/Photo-BG.png")}
           style={styles.BgImage}
         >
           <KeyboardAvoidingView
