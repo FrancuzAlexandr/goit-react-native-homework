@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   View,
@@ -18,7 +19,7 @@ const initialState = {
   password: "",
 };
 
-export default function App() {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState(initialState.email);
   const [password, setPassword] = useState(initialState.password);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
@@ -46,14 +47,14 @@ export default function App() {
   const onLogin = () => {
     keyboardHide();
     resetForm();
+    navigation.navigate("Home");
   };
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.bgImageContainer}>
         <ImageBackground
-          // source={require("/Users/francuz_alexandr/Documents/GitHub/react native/myNewProject/assets/Image/Photo-BG.png")}
-          source={require("../assets/Image/Photo-BG.png")}
+          source={require("..//../assets/Image/Photo-BG.png")}
           style={styles.BgImage}
         >
           <KeyboardAvoidingView
@@ -122,14 +123,20 @@ export default function App() {
                   >
                     <Text style={styles.btnText}>Login</Text>
                   </TouchableOpacity>
-                  <Text style={styles.registerText}>
-                    Don't have an account? Register
-                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => navigation.navigate("Registration")}
+                  >
+                    <Text style={styles.registerText}>
+                      Don't have an account? Register
+                    </Text>
+                  </TouchableOpacity>
                 </>
               )}
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
+        <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>
   );

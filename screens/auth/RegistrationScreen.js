@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   View,
@@ -21,7 +22,7 @@ const initialState = {
   password: "",
 };
 
-export default function App() {
+export default function RegistrationScreen({ navigation }) {
   const [name, setName] = useState(initialState.name);
   const [email, setEmail] = useState(initialState.email);
   const [password, setPassword] = useState(initialState.password);
@@ -52,13 +53,14 @@ export default function App() {
   const onRegister = () => {
     resetForm();
     keyboardHide();
+    navigation.navigate("Home");
   };
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.bgImageContainer}>
         <ImageBackground
-          source={require("../assets/Image/Photo-BG.png")}
+          source={require("..//../assets/Image/Photo-BG.png")}
           style={styles.BgImage}
         >
           <KeyboardAvoidingView
@@ -161,14 +163,20 @@ export default function App() {
                   >
                     <Text style={styles.btnText}>Register</Text>
                   </TouchableOpacity>
-                  <Text style={styles.loginText}>
-                    Allredy have an account? Login
-                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => navigation.navigate("Login")}
+                  >
+                    <Text style={styles.loginText}>
+                      Allredy have an account? Login
+                    </Text>
+                  </TouchableOpacity>
                 </>
               )}
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
+        <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -260,8 +268,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 16,
   },
-  // // keyboardAvoiding: {
-  // //   flex: 1,
-  //   // justifyContent: "flex-end",
-  // },
 });
