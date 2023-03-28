@@ -1,7 +1,11 @@
 import React from "react";
-// import { View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
@@ -12,58 +16,98 @@ const Tabs = createBottomTabNavigator();
 const Home = () => {
   return (
     <Tabs.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          if (route.name === "PostsScreen") {
-            iconName = focused
-              ? "ios-information-circle"
-              : "ios-information-circle-outline";
-          }
-          if (route.name === "CreatePostsScreen") {
-            iconName = focused
-              ? "ios-information-circle"
-              : "ios-information-circle-outline";
-          }
-          if (route.name === "ProfileScreen") {
-            iconName = focused
-              ? "ios-information-circle"
-              : "ios-information-circle-outline";
-          }
-          return <Ionicons name={iconName} size={size} color={color} />;
+      initialRouteName="PostsScreen"
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarShowIcon: true,
+        tabBarItemStyle: {
+          borderTopColor: "#E5E5E5",
+          borderTopWidth: 1,
         },
-      })}
-      tabBarOptions={{
-        activeTintColor: "tomato",
-        inactiveTintColor: "gray",
       }}
     >
       <Tabs.Screen
         name="PostsScreen"
         component={PostsScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginRight: 10,
+              }}
+              onPress={() => alert("Log out!")}
+            >
+              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          ),
+          tabBarIcon: ({ focused, color, size }) => {
+            return (
+              <Feather
+                name="grid"
+                size={24}
+                color={focused ? "#FF6C00" : color}
+              />
+            );
+          },
+          tabBarIconStyle: {
+            marginTop: 9,
+          },
+        }}
       />
+
       <Tabs.Screen
         name="CreatePostsScreen"
         component={CreatePostsScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => {
+            return (
+              <Ionicons
+                name="add"
+                size={24}
+                color={"#FFFFFF"}
+                // backgroundColor={focused ? "#FF6C00" : color}
+              />
+            );
+          },
+          tabBarIconStyle: {
+            backgroundColor: "#FF6C00",
+            width: 70,
+            height: 40,
+            borderRadius: 50,
+            marginTop: 9,
+          },
+
+          headerStyle: {
+            borderBottomColor: "#E5E5E5",
+            borderBottomWidth: 1,
+          },
+          headerRightContainerStyle: {
+            paddingRight: 15,
+          },
+        }}
       />
       <Tabs.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => {
+            return (
+              <Feather
+                name="user"
+                size={24}
+                color={focused ? "#FF6C00" : color}
+              />
+            );
+          },
+          tabBarIconStyle: {},
+        }}
       />
     </Tabs.Navigator>
   );
 };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
 
 export default Home;
