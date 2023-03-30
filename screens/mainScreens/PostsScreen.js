@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const PostsScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -8,6 +16,7 @@ const PostsScreen = ({ route, navigation }) => {
     if (route.params) {
       setPosts((prevPosts) => [...prevPosts, route.params]);
     }
+    console.log(route.params);
   }, [route.params]);
 
   return (
@@ -30,6 +39,21 @@ const PostsScreen = ({ route, navigation }) => {
         renderItem={({ item }) => (
           <View>
             <Image source={{ uri: item.photo }} style={styles.post} />
+            <View style={styles.navBtn}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("CommentsScreen")}
+              >
+                <Text>Coments</Text>
+                <Ionicons name="chatbubble-outline" size={24} color="#BDBDBD" />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MapScreen")}
+              >
+                <Text>Map</Text>
+                <Ionicons name="location-outline" size={24} color="#BDBDBD" />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
@@ -67,5 +91,10 @@ const styles = StyleSheet.create({
     height: 240,
     width: 370,
     borderRadius: 8,
+  },
+  navBtn: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
   },
 });

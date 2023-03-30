@@ -8,6 +8,9 @@ import LoginScreen from "./screens/auth/LoginScreen";
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import Home from "./screens/mainScreens/Home";
 
+import CommentsScreen from "./screens/mainScreens/CommentsScreen";
+import MapScreen from "./screens/mainScreens/MapScreen";
+
 export const useRoute = (isAuth) => {
   if (!isAuth) {
     return (
@@ -38,6 +41,8 @@ export const useRoute = (isAuth) => {
           headerShown: false,
         }}
       />
+      <AuthStack.Screen name="CommentsScreen" component={CommentsScreen} />
+      <AuthStack.Screen name="MapScreen" component={MapScreen} />
     </AuthStack.Navigator>
   );
 };
