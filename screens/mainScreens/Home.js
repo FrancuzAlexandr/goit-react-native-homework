@@ -61,7 +61,6 @@ const Home = () => {
         name="CreatePostsScreen"
         component={CreatePostsScreen}
         options={{
-          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <Ionicons
@@ -93,7 +92,6 @@ const Home = () => {
         name="ProfileScreen"
         component={ProfileScreen}
         options={{
-          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <Feather
