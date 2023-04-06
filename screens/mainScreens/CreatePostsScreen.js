@@ -23,7 +23,7 @@ const CreatePostsScreen = ({ navigation }) => {
   const [userData, setUserData] = useState(initialState);
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState("");
-  const [location, setLocation] = useState(null);
+  const [coords, setCoords] = useState(null);
 
   const takePhoto = async () => {
     const photo = await cameraRef.takePictureAsync();
@@ -33,14 +33,11 @@ const CreatePostsScreen = ({ navigation }) => {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
-    setLocation(coords);
-    console.log(photo);
-    console.log(coords);
-    console.log(userData);
+    setCoords(coords);
   };
 
   const sendPhoto = () => {
-    navigation.navigate("PostsScreen", { photo });
+    navigation.navigate("PostsScreen", { photo, userData, coords });
     onPressReset();
   };
   const onPressReset = () => {
@@ -80,7 +77,7 @@ const CreatePostsScreen = ({ navigation }) => {
 
         <TextInput
           placeholderTextColor={"#BDBDBD"}
-          placeholder="Location..."
+          placeholder="Location"
           style={styles.input}
           value={userData.location}
           onChangeText={(value) =>
@@ -95,7 +92,7 @@ const CreatePostsScreen = ({ navigation }) => {
           activeOpacity={0.8}
           onPress={sendPhoto}
         >
-          <Text style={styles.buttonTextActive}>Опубликовать</Text>
+          <Text style={styles.buttonTextActive}>Publish</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -123,14 +120,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    // marginHorizontal:16
     paddingHorizontal: 16,
   },
   fotoBox: {
     backgroundColor: "#F6F6F6",
     width: 343,
     height: 240,
-    // marginHorizontal: 21,
     marginTop: 32,
     alignItems: "center",
     justifyContent: "center",
@@ -140,7 +135,6 @@ const styles = StyleSheet.create({
     height: 240,
     marginHorizontal: 16,
     borderRadius: 8,
-    // marginTop: 32,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -158,7 +152,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 60,
     height: 60,
-    // backgroundColor: "#ffff",
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     alignItems: "center",
     justifyContent: "center",
@@ -172,24 +165,19 @@ const styles = StyleSheet.create({
   },
   previewPhoto: {
     height: 240,
-    // height:"70%",
-    // width: 358,
     width: "100%",
     borderRadius: 8,
   },
   text: {
-    // marginLeft: 20,
     color: "#BDBDBD",
   },
   input: {
     marginTop: 32,
     borderBottomWidth: 1,
-    // marginHorizontal: 20,
     borderBottomColor: "#E8E8E8",
     paddingBottom: 8,
   },
   button: {
-    // marginHorizontal: 16,
     marginTop: 32,
     backgroundColor: "#F6F6F6",
     height: 61,

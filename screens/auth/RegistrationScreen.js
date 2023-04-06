@@ -14,25 +14,24 @@ import {
   Dimensions,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { authSignUpUser } from "../../redux/auth/authOperations";
+
 import { AntDesign } from "@expo/vector-icons";
 
 const initialState = {
-  name: "",
+  userName: "",
   email: "",
   password: "",
 };
 
 export default function RegistrationScreen({ navigation }) {
-  const [name, setName] = useState(initialState.name);
-  const [email, setEmail] = useState(initialState.email);
-  const [password, setPassword] = useState(initialState.password);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [state, setState] = useState(initialState);
 
-  const nameHandler = (text) => setName(text);
-  const emailHandler = (text) => setEmail(text);
-  const passwordHandler = (text) => setPassword(text);
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setIsShowKeybord(false);
@@ -45,15 +44,13 @@ export default function RegistrationScreen({ navigation }) {
   };
 
   const resetForm = () => {
-    setEmail(initialState.email);
-    setPassword(initialState.password);
-    setName(initialState.name);
+    setState(initialState);
   };
 
   const onRegister = () => {
-    resetForm();
     keyboardHide();
-    navigation.navigate("Home");
+    dispatch(authSignUpUser(state));
+    resetForm();
   };
 
   return (
@@ -81,7 +78,7 @@ export default function RegistrationScreen({ navigation }) {
                       size={24}
                       color="orange"
                       onPress={() => {
-                        Alert.alert(`add photo`);
+                        alert(`add photo`);
                       }}
                     />
                   </Text>
@@ -90,8 +87,10 @@ export default function RegistrationScreen({ navigation }) {
               <Text style={styles.title}>Registration</Text>
               <View>
                 <TextInput
-                  value={name}
-                  onChangeText={nameHandler}
+                  value={state.userName}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, userName: value }))
+                  }
                   placeholder="Login"
                   placeholderTextColor="#BDBDBD"
                   maxLength={50}
@@ -109,8 +108,10 @@ export default function RegistrationScreen({ navigation }) {
               </View>
               <View>
                 <TextInput
-                  value={email}
-                  onChangeText={emailHandler}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, email: value }))
+                  }
                   placeholder="Email"
                   placeholderTextColor="#BDBDBD"
                   maxLength={50}
@@ -129,8 +130,13 @@ export default function RegistrationScreen({ navigation }) {
               </View>
               <View>
                 <TextInput
-                  value={password}
-                  onChangeText={passwordHandler}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      password: value,
+                    }))
+                  }
                   placeholder="Password"
                   placeholderTextColor="#BDBDBD"
                   maxLength={30}
