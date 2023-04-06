@@ -14,20 +14,21 @@ import {
   Dimensions,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/authOperations";
+
 const initialState = {
   email: "",
   password: "",
 };
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState(initialState.email);
-  const [password, setPassword] = useState(initialState.password);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [state, setState] = useState(initialState);
 
-  const emailHandler = (text) => setEmail(text);
-  const passwordHandler = (text) => setPassword(text);
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setIsShowKeybord(false);
@@ -40,14 +41,14 @@ export default function LoginScreen({ navigation }) {
   };
 
   const resetForm = () => {
-    setEmail(initialState.email);
-    setPassword(initialState.password);
+    setState(initialState);
   };
 
   const onLogin = () => {
     keyboardHide();
+    console.log("state", state);
+    dispatch(authSignInUser(state));
     resetForm();
-    navigation.navigate("Home");
   };
 
   return (
@@ -70,8 +71,10 @@ export default function LoginScreen({ navigation }) {
               <Text style={styles.title}>Login</Text>
               <View>
                 <TextInput
-                  value={email}
-                  onChangeText={emailHandler}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, email: value }))
+                  }
                   placeholder="Email"
                   placeholderTextColor="#BDBDBD"
                   maxLength={50}
@@ -89,8 +92,10 @@ export default function LoginScreen({ navigation }) {
               </View>
               <View>
                 <TextInput
-                  value={password}
-                  onChangeText={passwordHandler}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, password: value }))
+                  }
                   placeholder="Password"
                   placeholderTextColor="#BDBDBD"
                   maxLength={30}

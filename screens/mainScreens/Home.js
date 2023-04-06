@@ -11,9 +11,18 @@ import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 
+import { authSignOutUser } from "../../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
+
 const Tabs = createBottomTabNavigator();
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
+
   return (
     <Tabs.Navigator
       initialRouteName="PostsScreen"
@@ -37,7 +46,7 @@ const Home = () => {
                 justifyContent: "center",
                 marginRight: 10,
               }}
-              onPress={() => alert("Log out!")}
+              onPress={signOut}
             >
               <MaterialIcons name="logout" size={24} color="#BDBDBD" />
             </TouchableOpacity>
@@ -62,14 +71,7 @@ const Home = () => {
         component={CreatePostsScreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
-            return (
-              <Ionicons
-                name="add"
-                size={24}
-                color={"#FFFFFF"}
-                // backgroundColor={focused ? "#FF6C00" : color}
-              />
-            );
+            return <Ionicons name="add" size={24} color={"#FFFFFF"} />;
           },
           tabBarIconStyle: {
             backgroundColor: "#FF6C00",

@@ -2,8 +2,6 @@ import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-const AuthStack = createStackNavigator();
-
 import LoginScreen from "./screens/auth/LoginScreen";
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import Home from "./screens/mainScreens/Home";
@@ -11,38 +9,49 @@ import Home from "./screens/mainScreens/Home";
 import CommentsScreen from "./screens/mainScreens/CommentsScreen";
 import MapScreen from "./screens/mainScreens/MapScreen";
 
-export const useRoute = (isAuth) => {
-  if (!isAuth) {
-    return (
-      <AuthStack.Navigator>
-        <AuthStack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Login"
-          component={LoginScreen}
-        />
-        <AuthStack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Registration"
-          component={RegistrationScreen}
-        />
-      </AuthStack.Navigator>
-    );
-  }
+import { useSelector } from "react-redux";
+
+export const Router = () => {
+  const { stateChange } = useSelector((state) => state.auth);
+  console.log("user", stateChange);
+
+  const AuthStack = createStackNavigator();
+  const OtherStack = createStackNavigator();
+
   return (
-    <AuthStack.Navigator>
-      <AuthStack.Screen
-        name="Home"
-        component={Home}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <AuthStack.Screen name="CommentsScreen" component={CommentsScreen} />
-      <AuthStack.Screen name="MapScreen" component={MapScreen} />
-    </AuthStack.Navigator>
+    <>
+      {!stateChange && (
+        <AuthStack.Navigator>
+          <AuthStack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Login"
+            component={LoginScreen}
+          />
+          <AuthStack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Registration"
+            component={RegistrationScreen}
+          />
+        </AuthStack.Navigator>
+      )}
+
+      {stateChange && (
+        <OtherStack.Navigator>
+          <OtherStack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <OtherStack.Screen name="CommentsScreen" component={CommentsScreen} />
+          <OtherStack.Screen name="MapScreen" component={MapScreen} />
+        </OtherStack.Navigator>
+      )}
+    </>
   );
 };
