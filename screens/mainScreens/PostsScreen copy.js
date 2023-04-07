@@ -9,21 +9,15 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { db } from "../../firebase/config";
-import { collection, onSnapshot } from "firebase/firestore";
-
-const PostsScreen = ({ navigation }) => {
+const PostsScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
 
-  const getAllPost = async () => {
-    await onSnapshot(collection(db, "posts"), (snapshots) => {
-      setPosts(snapshots.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    });
-  };
-
   useEffect(() => {
-    getAllPost();
-  }, []);
+    if (route.params) {
+      setPosts((prevPosts) => [...prevPosts, route.params]);
+    }
+    console.log(route.params);
+  }, [route.params]);
 
   return (
     <View style={styles.container}>
