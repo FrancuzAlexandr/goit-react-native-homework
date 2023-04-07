@@ -45,7 +45,7 @@ const PostsScreen = ({ navigation }) => {
         renderItem={({ item }) => (
           <View>
             <Image source={{ uri: item.photo }} style={styles.post} />
-            <Text>{item.userData.name}</Text>
+            <Text>{item.title}</Text>
             <View style={styles.navBtn}>
               <TouchableOpacity
                 onPress={() => navigation.navigate("CommentsScreen")}
@@ -59,7 +59,7 @@ const PostsScreen = ({ navigation }) => {
                   navigation.navigate("MapScreen", { coords: item.coords })
                 }
               >
-                <Text>{item.userData.location}</Text>
+                <Text>{item.locationName}</Text>
 
                 <Ionicons name="location-outline" size={24} color="#BDBDBD" />
               </TouchableOpacity>
