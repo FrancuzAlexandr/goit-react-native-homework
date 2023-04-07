@@ -1,5 +1,6 @@
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
+import { useSelector } from "react-redux";
 
 import { useState } from "react";
 import {
@@ -10,6 +11,15 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+
+import {
+  getStorage,
+  uploadBytesResumable,
+  ref,
+  getDownloadURL,
+} from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../firebase/config";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -24,6 +34,10 @@ const CreatePostsScreen = ({ navigation }) => {
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState("");
   const [coords, setCoords] = useState(null);
+  const [title, setTitle] = useState("");
+  const [locationName, setLocationName] = useState("");
+
+  const { userId, login } = useSelector((state) => state.auth);
 
   const takePhoto = async () => {
     const photo = await cameraRef.takePictureAsync();
@@ -37,12 +51,37 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const sendPhoto = () => {
-    navigation.navigate("PostsScreen", { photo, userData, coords });
+    uploadPostToServer();
+    navigation.navigate("PostsScreen");
     onPressReset();
   };
   const onPressReset = () => {
     setPhoto("");
     setUserData(initialState);
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await addDoc(collection(db, "posts"), {
+      photo,
+      coords,
+      userId,
+      login,
+      userData,
+      title,
+      locationName,
+    });
+  };
+
+  const uploadPhotoToServer = async () => {
+    const storage = getStorage();
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString();
+    const data = ref(storage, `postImage/${uniquePostId}`);
+    await uploadBytesResumable(data, file);
+    const downloadPhoto = await getDownloadURL(data);
+    return downloadPhoto;
   };
 
   return (
@@ -69,20 +108,22 @@ const CreatePostsScreen = ({ navigation }) => {
           placeholderTextColor={"#BDBDBD"}
           placeholder="Name"
           style={styles.input}
-          value={userData.name}
-          onChangeText={(value) =>
-            setUserData((prevState) => ({ ...prevState, name: value }))
-          }
+          onChangeText={setTitle}
+          // value={userData.name}
+          // onChangeText={(value) =>
+          //   setUserData((prevState) => ({ ...prevState, name: value }))
+          // }
         ></TextInput>
 
         <TextInput
           placeholderTextColor={"#BDBDBD"}
           placeholder="Location"
           style={styles.input}
-          value={userData.location}
-          onChangeText={(value) =>
-            setUserData((prevState) => ({ ...prevState, location: value }))
-          }
+          onChangeText={setLocationName}
+          // value={userData.location}
+          // onChangeText={(value) =>
+          //   setUserData((prevState) => ({ ...prevState, location: value }))
+          // }
         ></TextInput>
       </View>
       <View style={styles.tabBarWrapper}></View>
