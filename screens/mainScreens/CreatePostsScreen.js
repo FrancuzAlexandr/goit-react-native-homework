@@ -24,20 +24,14 @@ import { db } from "../../firebase/config";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-const initialState = {
-  name: "",
-  location: "",
-};
-
 const CreatePostsScreen = ({ navigation }) => {
-  const [userData, setUserData] = useState(initialState);
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState("");
   const [coords, setCoords] = useState(null);
   const [title, setTitle] = useState("");
   const [locationName, setLocationName] = useState("");
 
-  const { userId, login } = useSelector((state) => state.auth);
+  const { userId, userName } = useSelector((state) => state.auth);
 
   const takePhoto = async () => {
     const photo = await cameraRef.takePictureAsync();
@@ -57,17 +51,25 @@ const CreatePostsScreen = ({ navigation }) => {
   };
   const onPressReset = () => {
     setPhoto("");
-    setUserData(initialState);
+    setTitle("");
+    setLocationName("");
   };
 
   const uploadPostToServer = async () => {
     const photo = await uploadPhotoToServer();
+    console.log({
+      photo,
+      coords,
+      userId,
+      userName,
+      title,
+      locationName,
+    });
     const createPost = await addDoc(collection(db, "posts"), {
       photo,
       coords,
       userId,
-      login,
-      userData,
+      userName,
       title,
       locationName,
     });

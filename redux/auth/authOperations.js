@@ -1,4 +1,5 @@
 import { auth } from "../../firebase/config";
+import { signIn } from "./authReducer";
 
 import {
   updateProfile,
@@ -42,8 +43,9 @@ export const authSignInUser =
     try {
       await signInWithEmailAndPassword(auth, email, password).then(
         (userCredential) => {
-          const user = userCredential.user;
-          console.log(user);
+          const { displayName, uid } = userCredential.user;
+
+          dispatch(signIn({ userName: displayName, userId: uid }));
         }
       );
       dispatch(authStateChange({ stateChange: true }));
